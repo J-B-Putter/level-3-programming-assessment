@@ -2,12 +2,12 @@
  * =====================================================================
  * Programming Project for NCEA Level 3, Standard 91906
  * ---------------------------------------------------------------------
- * Project Name:   PROJECT NAME HERE
- * Project Author: PROJECT AUTHOR HERE
- * GitHub Repo:    GITHUB REPO URL HERE
+ * Project Name:   SAILING ADVENTURE
+ * Project Author: JANNO PUTTER
+ * GitHub Repo:    https://github.com/J-B-Putter/level-3-programming-assessment
  * ---------------------------------------------------------------------
  * Notes:
- * PROJECT NOTES HERE
+ * Write your notes etc. in here.
  * =====================================================================
  */
 

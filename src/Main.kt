@@ -48,6 +48,10 @@ class App() {
     }
 }
 
+class Locations(val name: String, val directions: List<String>, val treasure: Int) {
+
+}
+
 
 /**
  * Main UI window (view)

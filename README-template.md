@@ -4,7 +4,7 @@ by Janno Putter
 
 ---
 
-This is a programming project for **NCEA Level 3**, assessed against standard [91906](../docs/as91906.pdf).
+This is a programming project for **NCEA Level 3**, assessed against standard [91906](docs/as91906.pdf).
 
 The project is written in the [Kotlin](https://kotlinlang.org) programming language and demonstrates a number of **complex programming techniques**:
 - Programming a graphical user interface (GUI)

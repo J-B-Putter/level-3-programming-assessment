@@ -63,6 +63,14 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
     // Fields to hold the UI elements
     private lateinit var clicksLabel: JLabel
     private lateinit var clickButton: JButton
+    //Locations
+    private lateinit var currentLocation: JPanel
+    private lateinit var northLocation: JButton
+    private lateinit var eastLocation: JButton
+    private lateinit var westLocation: JButton
+    private lateinit var southLocation: JButton
+
+
 
     /**
      * Configure the UI and display it
@@ -82,7 +90,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
      */
     private fun configureWindow() {
         title = "Kotlin Swing GUI Demo"
-        contentPane.preferredSize = Dimension(600, 350)
+        contentPane.preferredSize = Dimension(1000, 500)
         defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         isResizable = false
         layout = null
@@ -90,23 +98,58 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         pack()
     }
 
+
     /**
      * Populate the UI with UI controls
      */
     private fun addControls() {
         val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 36)
+        var yCord: Int = 0
 
         clicksLabel = JLabel("CLICK INFO HERE")
         clicksLabel.horizontalAlignment = SwingConstants.CENTER
         clicksLabel.bounds = Rectangle(50, 50, 500, 100)
         clicksLabel.font = baseFont
-        add(clicksLabel)
+        //add(clicksLabel)
 
         clickButton = JButton("Click Me!")
         clickButton.bounds = Rectangle(50,200,500,100)
         clickButton.font = baseFont
         clickButton.addActionListener(this)     // Handle any clicks
-        add(clickButton)
+        //add(clickButton)
+
+        //Locations
+        currentLocation = JPanel()
+        currentLocation.bounds = Rectangle(289, 287, 50, 50)
+        currentLocation.background = Color.GRAY
+        add(currentLocation)
+
+        northLocation = JButton()
+        northLocation.bounds = Rectangle(289, 219, 50, 50)
+        northLocation.addActionListener(this)
+        northLocation.background = Color.GRAY
+        add(northLocation)
+
+        eastLocation = JButton()
+        eastLocation.bounds = Rectangle(221, 287, 50, 50)
+        eastLocation.addActionListener(this)
+        eastLocation.background = Color.GRAY
+        add(eastLocation)
+
+        westLocation = JButton()
+        westLocation.bounds = Rectangle(357, 287, 50, 50)
+        westLocation.addActionListener(this)
+        westLocation.background = Color.GRAY
+        add(westLocation)
+
+        southLocation = JButton()
+        southLocation.bounds = Rectangle(289, 355, 50, 50)
+        southLocation.addActionListener(this)
+        southLocation.background = Color.GRAY
+        add(southLocation)
+
+        if (currentLocation.bounds.y == 287) remove(southLocation)
+
     }
 
 
@@ -131,10 +174,13 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
      * then refreshing the UI view
      */
     override fun actionPerformed(e: ActionEvent?) {
+        var yCord = currentLocation.bounds.y
+        var xCord = currentLocation.bounds.x
         when (e?.source) {
-            clickButton -> {
-                app.updateClickCount()
-                updateView()
+            northLocation -> {
+                yCord -= 68
+                currentLocation.bounds.y = yCord
+
             }
         }
     }

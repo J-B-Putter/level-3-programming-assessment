@@ -58,7 +58,7 @@ class Locations(val name: String, val directions: List<String>, val treasure: In
  * Defines the UI and responds to events
  * The app model should be passwd as an argument
  */
-class MainWindow(val app: App) : JFrame(), ActionListener {
+class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
     // Fields to hold the UI elements
     private lateinit var clicksLabel: JLabel
@@ -131,13 +131,13 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         add(northLocation)
 
         eastLocation = JButton()
-        eastLocation.bounds = Rectangle(221, 287, 50, 50)
+        eastLocation.bounds = Rectangle(357, 287, 50, 50)
         eastLocation.addActionListener(this)
         eastLocation.background = Color.GRAY
         add(eastLocation)
 
         westLocation = JButton()
-        westLocation.bounds = Rectangle(357, 287, 50, 50)
+        westLocation.bounds = Rectangle(221, 287, 50, 50)
         westLocation.addActionListener(this)
         westLocation.background = Color.GRAY
         add(westLocation)
@@ -148,7 +148,6 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
         southLocation.background = Color.GRAY
         add(southLocation)
 
-        if (currentLocation.bounds.y == 287) remove(southLocation)
 
     }
 
@@ -158,14 +157,63 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
      * of the application model
      */
     fun updateView() {
-        if (app.clicks == app.MAX_CLICKS) {
-            clicksLabel.text = "Max clicks reached!"
-            clickButton.isEnabled = false
-        }
-        else {
-            clicksLabel.text = "You clicked ${app.clicks} times"
-            clickButton.isEnabled = true
-        }
+        if (currentLocation.bounds.y == 287) southLocation.isVisible = false
+        else southLocation.isVisible = true
+
+        if (currentLocation.bounds.y == 83) northLocation.isVisible = false
+        else northLocation.isVisible = true
+
+        if (currentLocation.bounds.x == 425) eastLocation.isVisible = false
+        else eastLocation.isVisible = true
+
+        if (currentLocation.bounds.x == 153) westLocation.isVisible = false
+        else westLocation.isVisible = true
+
+    }
+    fun moveNorth(){
+        var yCord = currentLocation.bounds.y
+        var xCord = currentLocation.bounds.x
+
+        yCord -= 68
+        currentLocation.bounds = Rectangle(xCord, yCord, 50, 50)
+        westLocation.bounds = Rectangle(westLocation.bounds.x, yCord, 50, 50)
+        eastLocation.bounds = Rectangle(eastLocation.bounds.x, yCord, 50, 50)
+        northLocation.bounds = Rectangle(northLocation.bounds.x, northLocation.bounds.y - 68, 50, 50)
+        southLocation.bounds = Rectangle(southLocation.bounds.x, southLocation.bounds.y - 68, 50, 50)
+
+    }
+    fun moveSouth(){
+        var yCord = currentLocation.bounds.y
+        var xCord = currentLocation.bounds.x
+
+        yCord += 68
+        currentLocation.bounds = Rectangle(xCord, yCord, 50, 50)
+        westLocation.bounds = Rectangle(westLocation.bounds.x, yCord, 50, 50)
+        eastLocation.bounds = Rectangle(eastLocation.bounds.x, yCord, 50, 50)
+        northLocation.bounds = Rectangle(northLocation.bounds.x, northLocation.bounds.y + 68, 50, 50)
+        southLocation.bounds = Rectangle(southLocation.bounds.x, southLocation.bounds.y + 68, 50, 50)
+    }
+    fun moveEast(){
+        var yCord = currentLocation.bounds.y
+        var xCord = currentLocation.bounds.x
+
+        xCord += 68
+        currentLocation.bounds = Rectangle(xCord, yCord, 50, 50)
+        westLocation.bounds = Rectangle(westLocation.bounds.x + 68, yCord, 50, 50)
+        eastLocation.bounds = Rectangle(eastLocation.bounds.x + 68, yCord, 50, 50)
+        northLocation.bounds = Rectangle(northLocation.bounds.x + 68, northLocation.bounds.y, 50, 50)
+        southLocation.bounds = Rectangle(southLocation.bounds.x + 68, southLocation.bounds.y, 50, 50)
+    }
+    fun moveWest(){
+        var yCord = currentLocation.bounds.y
+        var xCord = currentLocation.bounds.x
+
+        xCord -= 68
+        currentLocation.bounds = Rectangle(xCord, yCord, 50, 50)
+        westLocation.bounds = Rectangle(westLocation.bounds.x - 68, yCord, 50, 50)
+        eastLocation.bounds = Rectangle(eastLocation.bounds.x - 68, yCord, 50, 50)
+        northLocation.bounds = Rectangle(northLocation.bounds.x - 68, northLocation.bounds.y, 50, 50)
+        southLocation.bounds = Rectangle(southLocation.bounds.x - 68, southLocation.bounds.y, 50, 50)
     }
 
     /**
@@ -174,15 +222,44 @@ class MainWindow(val app: App) : JFrame(), ActionListener {
      * then refreshing the UI view
      */
     override fun actionPerformed(e: ActionEvent?) {
-        var yCord = currentLocation.bounds.y
-        var xCord = currentLocation.bounds.x
         when (e?.source) {
             northLocation -> {
-                yCord -= 68
-                currentLocation.bounds.y = yCord
-
+                moveNorth()
+                updateView()
+            }
+            southLocation -> {
+                moveSouth()
+                updateView()
+            }
+            eastLocation -> {
+                moveEast()
+                updateView()
+            }
+            westLocation -> {
+                moveWest()
+                updateView()
             }
         }
+
+    }
+
+    override fun keyTyped(e: KeyEvent?) {
+        when (e?.keyCode) {
+            KeyEvent.VK_UP    -> moveNorth()
+            KeyEvent.VK_DOWN  -> moveSouth()
+            KeyEvent.VK_LEFT   -> moveEast()
+            KeyEvent.VK_RIGHT  -> moveWest()
+        }
+        updateView()
+
+    }
+
+    override fun keyPressed(e: KeyEvent?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun keyReleased(e: KeyEvent?) {
+        TODO("Not yet implemented")
     }
 
 }

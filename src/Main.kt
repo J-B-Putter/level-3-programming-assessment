@@ -15,6 +15,7 @@
 
 import com.formdev.flatlaf.FlatDarkLaf
 import java.awt.*
+import java.awt.Font.SANS_SERIF
 import java.awt.event.*
 import javax.swing.*
 
@@ -35,17 +36,7 @@ fun main() {
  * stored, plus any application logic functions
  */
 class App() {
-    // Constants defining any key values
-    val MAX_CLICKS = 10
 
-    // Data fields
-    var clicks = 0
-
-    // Application logic functions
-    fun updateClickCount() {
-        clicks++
-        if (clicks > MAX_CLICKS) clicks = MAX_CLICKS
-    }
 }
 
 class Locations(val name: String, val directions: List<String>, val treasure: Int) {
@@ -69,6 +60,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
     private lateinit var eastLocation: JButton
     private lateinit var westLocation: JButton
     private lateinit var southLocation: JButton
+    private lateinit var dialogField: JTextArea
+    private lateinit var backGround: JPanel
 
 
 
@@ -104,7 +97,6 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
      */
     private fun addControls() {
         val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 36)
-        var yCord: Int = 0
 
         clicksLabel = JLabel("CLICK INFO HERE")
         clicksLabel.horizontalAlignment = SwingConstants.CENTER
@@ -128,25 +120,41 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         northLocation.bounds = Rectangle(289, 219, 50, 50)
         northLocation.addActionListener(this)
         northLocation.background = Color.GRAY
+        //northLocation.icon
         add(northLocation)
 
         eastLocation = JButton()
         eastLocation.bounds = Rectangle(357, 287, 50, 50)
         eastLocation.addActionListener(this)
         eastLocation.background = Color.GRAY
+        //eastLocation.icon
         add(eastLocation)
 
         westLocation = JButton()
         westLocation.bounds = Rectangle(221, 287, 50, 50)
         westLocation.addActionListener(this)
         westLocation.background = Color.GRAY
+        //westLocation.icon
         add(westLocation)
 
         southLocation = JButton()
         southLocation.bounds = Rectangle(289, 355, 50, 50)
         southLocation.addActionListener(this)
         southLocation.background = Color.GRAY
+        //southLocation.icon
         add(southLocation)
+
+        dialogField = JTextArea()
+        dialogField.font = Font(SANS_SERIF, Font.PLAIN, 14)
+        dialogField.bounds = Rectangle(647, 76, 250, 336)
+        dialogField.background = Color.GRAY
+        add(dialogField)
+
+        backGround = JPanel()
+        backGround.background = Color(0,105, 148)
+        //backGround.icon
+        backGround.bounds = Rectangle(146, 76, 405, 336)
+        add(backGround)
 
 
     }
@@ -157,17 +165,22 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
      * of the application model
      */
     fun updateView() {
-        if (currentLocation.bounds.y == 287) southLocation.isVisible = false
+
+        if (currentLocation.bounds.y == 355) southLocation.isVisible = false
         else southLocation.isVisible = true
 
         if (currentLocation.bounds.y == 83) northLocation.isVisible = false
         else northLocation.isVisible = true
 
-        if (currentLocation.bounds.x == 425) eastLocation.isVisible = false
+        if (currentLocation.bounds.x == 493) eastLocation.isVisible = false
         else eastLocation.isVisible = true
 
         if (currentLocation.bounds.x == 153) westLocation.isVisible = false
         else westLocation.isVisible = true
+
+        //BackGround Image
+        var Image = "istockphoto-1371714013-612x612"
+        
 
     }
     fun moveNorth(){
@@ -244,6 +257,9 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
     }
 
     override fun keyTyped(e: KeyEvent?) {
+    }
+
+    override fun keyPressed(e: KeyEvent?) {
         when (e?.keyCode) {
             KeyEvent.VK_UP    -> moveNorth()
             KeyEvent.VK_DOWN  -> moveSouth()
@@ -252,10 +268,6 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         }
         updateView()
 
-    }
-
-    override fun keyPressed(e: KeyEvent?) {
-        TODO("Not yet implemented")
     }
 
     override fun keyReleased(e: KeyEvent?) {

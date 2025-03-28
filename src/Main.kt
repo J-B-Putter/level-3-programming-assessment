@@ -36,10 +36,50 @@ fun main() {
  * stored, plus any application logic functions
  */
 class App() {
+    // constants
+    val GRID_SIZE = 68
+    val MARGIN = 18
+    val MAP_WIDTH = 6
+    val MAP_HEIGHT = 5
 
+    // app data
+    var playerX = 2
+    var playerY = 4
+
+    var treasureX = 0
+    var treasureY = 0
+
+    init {
+        placeTreasure()
+    }
+
+    fun placeTreasure() {
+
+    }
+
+    fun moveNorth() {
+        playerY--
+        if (playerY < 0) playerY = 0
+    }
+    fun moveSouth() {
+        playerY++
+        if (playerY > MAP_HEIGHT) playerY = MAP_HEIGHT
+    }
+    fun moveEast() {
+        playerX++
+        if (playerX > MAP_WIDTH) playerX = MAP_WIDTH
+    }
+    fun moveWest() {
+        playerX--
+        if (playerX < 0) playerX = 0
+    }
+
+//    fun playerFoundTreasure(): Boolean {
+//
+//    }
 }
 
-class Locations(val name: String, val directions: List<String>, val treasure: Int) {
+class Locations(val name: String, val treasure: Boolean) {
 
 }
 
@@ -62,6 +102,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
     private lateinit var southLocation: JButton
     private lateinit var dialogField: JTextArea
     private lateinit var backGround: JPanel
+    private lateinit var xPosition: JPanel
+    private lateinit var yPosition: JPanel
 
 
 
@@ -70,12 +112,13 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
      */
     init {
         configureWindow()               // Configure the window
-        addControls()                   // Build the UI
+        addControls()                   // Build the UI\
+        placeTreasure()
 
         setLocationRelativeTo(null)     // Centre the window
         isVisible = true                // Make it visible
 
-        updateView()                    // Initialise the UI
+        //updateView()                    // Initialise the UI
     }
 
     /**
@@ -112,33 +155,33 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
         //Locations
         currentLocation = JPanel()
-        currentLocation.bounds = Rectangle(289, 287, 50, 50)
+        currentLocation.bounds = Rectangle(289, 355, 50, 50)
         currentLocation.background = Color.GRAY
         add(currentLocation)
 
         northLocation = JButton()
-        northLocation.bounds = Rectangle(289, 219, 50, 50)
+        northLocation.bounds = Rectangle(289, 287, 50, 50)
         northLocation.addActionListener(this)
         northLocation.background = Color.GRAY
         //northLocation.icon
         add(northLocation)
 
         eastLocation = JButton()
-        eastLocation.bounds = Rectangle(357, 287, 50, 50)
+        eastLocation.bounds = Rectangle(357, 355, 50, 50)
         eastLocation.addActionListener(this)
         eastLocation.background = Color.GRAY
         //eastLocation.icon
         add(eastLocation)
 
         westLocation = JButton()
-        westLocation.bounds = Rectangle(221, 287, 50, 50)
+        westLocation.bounds = Rectangle(221, 355, 50, 50)
         westLocation.addActionListener(this)
         westLocation.background = Color.GRAY
         //westLocation.icon
         add(westLocation)
 
         southLocation = JButton()
-        southLocation.bounds = Rectangle(289, 355, 50, 50)
+        southLocation.bounds = Rectangle(289, 423, 50, 50)
         southLocation.addActionListener(this)
         southLocation.background = Color.GRAY
         //southLocation.icon
@@ -150,10 +193,22 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         dialogField.background = Color.GRAY
         add(dialogField)
 
+        xPosition = JPanel()
+        xPosition.background = Color.RED
+        xPosition.bounds = Rectangle(0, 76, 10, 405)
+        xPosition.isVisible = false
+        add(xPosition)
+
+        yPosition = JPanel()
+        yPosition.background = Color.RED
+        yPosition.bounds = Rectangle(146, 0, 336, 10)
+        yPosition.isVisible = false
+        add(yPosition)
+
         backGround = JPanel()
         backGround.background = Color(0,105, 148)
         //backGround.icon
-        backGround.bounds = Rectangle(146, 76, 405, 336)
+        backGround.bounds = Rectangle(app.MARGIN/2, app.MARGIN/2, app.MAP_WIDTH * app.GRID_SIZE, app.MAP_HEIGHT * app.GRID_SIZE)
         add(backGround)
 
 
@@ -164,69 +219,72 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
      * Update the UI controls based on the current state
      * of the application model
      */
+//    fun updateView() {
+//
+//        if (currentLocation.bounds.y == 355) {
+//            southLocation.isVisible = false
+//        }
+//        else southLocation.isVisible = true
+//
+//        northLocation.isVisible = (currentLocation.bounds.y != 83)
+//
+//        if (currentLocation.bounds.x == 493) eastLocation.isVisible = false
+//        else eastLocation.isVisible = true
+//
+//        if (currentLocation.bounds.x == 153) westLocation.isVisible = false
+//        else westLocation.isVisible = true
+//
+//        //Showing Treasure Positions
+//
+//
+//    }
+
     fun updateView() {
+        val yCord = app.playerY * app.GRID_SIZE + app.MARGIN
+        val xCord = app.playerX * app.GRID_SIZE + app.MARGIN
+        val size = 50
 
-        if (currentLocation.bounds.y == 355) southLocation.isVisible = false
-        else southLocation.isVisible = true
+        currentLocation.bounds = Rectangle(xCord, yCord, size, size)
+        westLocation.bounds = Rectangle(xCord - app.GRID_SIZE, yCord, size, size)
+        eastLocation.bounds = Rectangle(xCord + app.GRID_SIZE, yCord, size, size)
+        northLocation.bounds = Rectangle(xCord, yCord - app.GRID_SIZE, size, size)
+        southLocation.bounds = Rectangle(xCord, yCord + app.GRID_SIZE, size, size)
 
-        if (currentLocation.bounds.y == 83) northLocation.isVisible = false
-        else northLocation.isVisible = true
-
-        if (currentLocation.bounds.x == 493) eastLocation.isVisible = false
-        else eastLocation.isVisible = true
-
-        if (currentLocation.bounds.x == 153) westLocation.isVisible = false
-        else westLocation.isVisible = true
-
-        //BackGround Image
-        var Image = "istockphoto-1371714013-612x612"
-        
+        northLocation.isVisible = (app.playerY > 0)
+        southLocation.isVisible = (app.playerY < app.MAP_HEIGHT - 1)
+        eastLocation.isVisible = (app.playerX < app.MAP_WIDTH - 1)
+        westLocation.isVisible = (app.playerX > 0)
 
     }
-    fun moveNorth(){
-        var yCord = currentLocation.bounds.y
-        var xCord = currentLocation.bounds.x
-
-        yCord -= 68
-        currentLocation.bounds = Rectangle(xCord, yCord, 50, 50)
-        westLocation.bounds = Rectangle(westLocation.bounds.x, yCord, 50, 50)
-        eastLocation.bounds = Rectangle(eastLocation.bounds.x, yCord, 50, 50)
-        northLocation.bounds = Rectangle(northLocation.bounds.x, northLocation.bounds.y - 68, 50, 50)
-        southLocation.bounds = Rectangle(southLocation.bounds.x, southLocation.bounds.y - 68, 50, 50)
-
+    fun moveNorth() {
+        app.moveNorth()
+        updateView()
     }
     fun moveSouth(){
-        var yCord = currentLocation.bounds.y
-        var xCord = currentLocation.bounds.x
-
-        yCord += 68
-        currentLocation.bounds = Rectangle(xCord, yCord, 50, 50)
-        westLocation.bounds = Rectangle(westLocation.bounds.x, yCord, 50, 50)
-        eastLocation.bounds = Rectangle(eastLocation.bounds.x, yCord, 50, 50)
-        northLocation.bounds = Rectangle(northLocation.bounds.x, northLocation.bounds.y + 68, 50, 50)
-        southLocation.bounds = Rectangle(southLocation.bounds.x, southLocation.bounds.y + 68, 50, 50)
-    }
+        app.moveSouth()
+        updateView()
+     }
     fun moveEast(){
-        var yCord = currentLocation.bounds.y
-        var xCord = currentLocation.bounds.x
-
-        xCord += 68
-        currentLocation.bounds = Rectangle(xCord, yCord, 50, 50)
-        westLocation.bounds = Rectangle(westLocation.bounds.x + 68, yCord, 50, 50)
-        eastLocation.bounds = Rectangle(eastLocation.bounds.x + 68, yCord, 50, 50)
-        northLocation.bounds = Rectangle(northLocation.bounds.x + 68, northLocation.bounds.y, 50, 50)
-        southLocation.bounds = Rectangle(southLocation.bounds.x + 68, southLocation.bounds.y, 50, 50)
-    }
+        app.moveEast()
+        updateView()
+   }
     fun moveWest(){
-        var yCord = currentLocation.bounds.y
-        var xCord = currentLocation.bounds.x
+        app.moveWest()
+        updateView()
+    }
+    fun placeTreasure(){
+        val treasureX = listOf(153, 221, 298, 357, 425, 493)
+        val treasureY = listOf(83, 151, 219, 287, 355)
 
-        xCord -= 68
-        currentLocation.bounds = Rectangle(xCord, yCord, 50, 50)
-        westLocation.bounds = Rectangle(westLocation.bounds.x - 68, yCord, 50, 50)
-        eastLocation.bounds = Rectangle(eastLocation.bounds.x - 68, yCord, 50, 50)
-        northLocation.bounds = Rectangle(northLocation.bounds.x - 68, northLocation.bounds.y, 50, 50)
-        southLocation.bounds = Rectangle(southLocation.bounds.x - 68, southLocation.bounds.y, 50, 50)
+
+        xPosition.bounds = Rectangle(treasureX.random(), 78, 10, 336)
+        yPosition.bounds = Rectangle(146,treasureY.random(), 405, 10)
+
+        println("Treasure X: ${xPosition.bounds.x}")
+        println("Treasure Y: ${yPosition.bounds.y}")
+
+        xPosition.isVisible = true
+        yPosition.isVisible = true
     }
 
     /**

@@ -39,21 +39,42 @@ class App() {
     // constants
     val GRID_SIZE = 68
     val MARGIN = 18
-    val MAP_WIDTH = 6
+    val MAP_WIDTH = 8
     val MAP_HEIGHT = 5
+    val SQUARE_SIZE = GRID_SIZE - MARGIN
+    val TREASURE_CLUES_X = 3
+    val TREASURE_CLUES_Y = 3
 
     // app data
     var playerX = 2
     var playerY = 4
+    var playerCollectX = 0
+    var playerCollectY = 0
 
     var treasureX = 0
     var treasureY = 0
+
 
     init {
         placeTreasure()
     }
 
     fun placeTreasure() {
+        //Place treasure
+        treasureX = (0..<MAP_WIDTH).random() * GRID_SIZE + MARGIN + (SQUARE_SIZE/2)
+        treasureY = (0..<MAP_HEIGHT).random() * GRID_SIZE + MARGIN + (SQUARE_SIZE/2)
+
+        //Place clues
+        var xClue1 = (0..<MAP_WIDTH).random()
+        var xClue2 = (0..<MAP_WIDTH).random()
+        var xClue3 = (0..<MAP_WIDTH).random()
+//        if (xClue1 == xClue2 || xClue1 == xClue3 || xClue2 == xClue3)
+
+        var yClue1 = (0..<MAP_HEIGHT).random()
+        var yClue2 = (0..<MAP_HEIGHT).random()
+        var yClue3 = (0..<MAP_HEIGHT).random()
+//        if (yClue1 == yClue2 || yClue1 == yClue3 || yClue2 == yClue3)
+
 
     }
 
@@ -92,18 +113,17 @@ class Locations(val name: String, val treasure: Boolean) {
 class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
     // Fields to hold the UI elements
-    private lateinit var clicksLabel: JLabel
-    private lateinit var clickButton: JButton
     //Locations
     private lateinit var currentLocation: JPanel
     private lateinit var northLocation: JButton
     private lateinit var eastLocation: JButton
     private lateinit var westLocation: JButton
     private lateinit var southLocation: JButton
-    private lateinit var dialogField: JTextArea
-    private lateinit var backGround: JPanel
     private lateinit var xPosition: JPanel
     private lateinit var yPosition: JPanel
+    //Visual Assistants
+    private lateinit var dialogField: JTextArea
+    private lateinit var backGround: JPanel
 
 
 
@@ -139,69 +159,59 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
      * Populate the UI with UI controls
      */
     private fun addControls() {
-        val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 36)
-
-        clicksLabel = JLabel("CLICK INFO HERE")
-        clicksLabel.horizontalAlignment = SwingConstants.CENTER
-        clicksLabel.bounds = Rectangle(50, 50, 500, 100)
-        clicksLabel.font = baseFont
-        //add(clicksLabel)
-
-        clickButton = JButton("Click Me!")
-        clickButton.bounds = Rectangle(50,200,500,100)
-        clickButton.font = baseFont
-        clickButton.addActionListener(this)     // Handle any clicks
-        //add(clickButton)
+        val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 14)
+        val startPositionX = app.playerX * app.GRID_SIZE + app.MARGIN
+        val startPositionY = app.playerY * app.GRID_SIZE + app.MARGIN
 
         //Locations
         currentLocation = JPanel()
-        currentLocation.bounds = Rectangle(289, 355, 50, 50)
+        currentLocation.bounds = Rectangle(startPositionX, startPositionY, app.SQUARE_SIZE, app.SQUARE_SIZE)
         currentLocation.background = Color.GRAY
         add(currentLocation)
 
         northLocation = JButton()
-        northLocation.bounds = Rectangle(289, 287, 50, 50)
+        northLocation.bounds = Rectangle(startPositionX, startPositionY - app.GRID_SIZE, app.SQUARE_SIZE, app.SQUARE_SIZE)
         northLocation.addActionListener(this)
         northLocation.background = Color.GRAY
         //northLocation.icon
         add(northLocation)
 
         eastLocation = JButton()
-        eastLocation.bounds = Rectangle(357, 355, 50, 50)
+        eastLocation.bounds = Rectangle(startPositionX + app.GRID_SIZE, startPositionY, app.SQUARE_SIZE, app.SQUARE_SIZE)
         eastLocation.addActionListener(this)
         eastLocation.background = Color.GRAY
         //eastLocation.icon
         add(eastLocation)
 
         westLocation = JButton()
-        westLocation.bounds = Rectangle(221, 355, 50, 50)
+        westLocation.bounds = Rectangle(startPositionX - app.GRID_SIZE, startPositionY, app.SQUARE_SIZE, app.SQUARE_SIZE)
         westLocation.addActionListener(this)
         westLocation.background = Color.GRAY
         //westLocation.icon
         add(westLocation)
 
         southLocation = JButton()
-        southLocation.bounds = Rectangle(289, 423, 50, 50)
+        southLocation.bounds = Rectangle(startPositionX + app.GRID_SIZE, startPositionY, app.SQUARE_SIZE, app.SQUARE_SIZE)
         southLocation.addActionListener(this)
         southLocation.background = Color.GRAY
         //southLocation.icon
         add(southLocation)
 
         dialogField = JTextArea()
-        dialogField.font = Font(SANS_SERIF, Font.PLAIN, 14)
-        dialogField.bounds = Rectangle(647, 76, 250, 336)
+        dialogField.font = baseFont
+        dialogField.bounds = Rectangle(app.MAP_WIDTH * app.GRID_SIZE + app.MARGIN + 100, app.MARGIN/2, 250, 336)
         dialogField.background = Color.GRAY
         add(dialogField)
 
         xPosition = JPanel()
         xPosition.background = Color.RED
-        xPosition.bounds = Rectangle(0, 76, 10, 405)
+//        xPosition.bounds = Rectangle(0, 76, 10, 405)
         xPosition.isVisible = false
         add(xPosition)
 
         yPosition = JPanel()
         yPosition.background = Color.RED
-        yPosition.bounds = Rectangle(146, 0, 336, 10)
+//        yPosition.bounds = Rectangle(146, 0, 336, 10)
         yPosition.isVisible = false
         add(yPosition)
 
@@ -211,7 +221,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         backGround.bounds = Rectangle(app.MARGIN/2, app.MARGIN/2, app.MAP_WIDTH * app.GRID_SIZE, app.MAP_HEIGHT * app.GRID_SIZE)
         add(backGround)
 
-
+        updateView()
     }
 
 
@@ -219,30 +229,10 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
      * Update the UI controls based on the current state
      * of the application model
      */
-//    fun updateView() {
-//
-//        if (currentLocation.bounds.y == 355) {
-//            southLocation.isVisible = false
-//        }
-//        else southLocation.isVisible = true
-//
-//        northLocation.isVisible = (currentLocation.bounds.y != 83)
-//
-//        if (currentLocation.bounds.x == 493) eastLocation.isVisible = false
-//        else eastLocation.isVisible = true
-//
-//        if (currentLocation.bounds.x == 153) westLocation.isVisible = false
-//        else westLocation.isVisible = true
-//
-//        //Showing Treasure Positions
-//
-//
-//    }
-
     fun updateView() {
         val yCord = app.playerY * app.GRID_SIZE + app.MARGIN
         val xCord = app.playerX * app.GRID_SIZE + app.MARGIN
-        val size = 50
+        val size = app.SQUARE_SIZE
 
         currentLocation.bounds = Rectangle(xCord, yCord, size, size)
         westLocation.bounds = Rectangle(xCord - app.GRID_SIZE, yCord, size, size)
@@ -273,18 +263,20 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         updateView()
     }
     fun placeTreasure(){
-        val treasureX = listOf(153, 221, 298, 357, 425, 493)
-        val treasureY = listOf(83, 151, 219, 287, 355)
+//        app.treasureX = app.treasureX * app.GRID_SIZE + app.MARGIN
+//        app.treasureY = app.treasureY * app.GRID_SIZE + app.MARGIN
 
+        xPosition.bounds = Rectangle(app.treasureX, backGround.bounds.y, 5, app.MAP_HEIGHT * app.GRID_SIZE)
+        yPosition.bounds = Rectangle(backGround.bounds.x,app.treasureY, app.MAP_WIDTH * app.GRID_SIZE, 5)
 
-        xPosition.bounds = Rectangle(treasureX.random(), 78, 10, 336)
-        yPosition.bounds = Rectangle(146,treasureY.random(), 405, 10)
+        println("Treasure X: ${app.treasureX/app.GRID_SIZE}")
+        println("Treasure Y: ${app.treasureY/app.GRID_SIZE}")
 
-        println("Treasure X: ${xPosition.bounds.x}")
-        println("Treasure Y: ${yPosition.bounds.y}")
+//        xPosition.isVisible = true
+//        yPosition.isVisible = true
+    }
+    fun findClues(){
 
-        xPosition.isVisible = true
-        yPosition.isVisible = true
     }
 
     /**
@@ -329,7 +321,6 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
     }
 
     override fun keyReleased(e: KeyEvent?) {
-        TODO("Not yet implemented")
     }
 
 }

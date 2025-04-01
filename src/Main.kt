@@ -15,7 +15,6 @@
 
 import com.formdev.flatlaf.FlatDarkLaf
 import java.awt.*
-import java.awt.Font.SANS_SERIF
 import java.awt.event.*
 import javax.swing.*
 
@@ -54,26 +53,32 @@ class App() {
     var treasureX = 0
     var treasureY = 0
 
+    val cluesX = mutableListOf<Int>()
+    val cluesY = mutableListOf<Int>()
+
+    var cluesDiscovered = 0
+
 
     init {
         placeTreasure()
     }
+    //Create Locations
+
 
     fun placeTreasure() {
         //Place treasure
-        treasureX = (0..<MAP_WIDTH).random() * GRID_SIZE + MARGIN + (SQUARE_SIZE/2)
-        treasureY = (0..<MAP_HEIGHT).random() * GRID_SIZE + MARGIN + (SQUARE_SIZE/2)
+        treasureX = (0..<MAP_WIDTH).random()
+        treasureY = (0..<MAP_HEIGHT).random()
 
-        //Place clues
-        var xClue1 = (0..<MAP_WIDTH).random()
-        var xClue2 = (0..<MAP_WIDTH).random()
-        var xClue3 = (0..<MAP_WIDTH).random()
-//        if (xClue1 == xClue2 || xClue1 == xClue3 || xClue2 == xClue3)
-
-        var yClue1 = (0..<MAP_HEIGHT).random()
-        var yClue2 = (0..<MAP_HEIGHT).random()
-        var yClue3 = (0..<MAP_HEIGHT).random()
-//        if (yClue1 == yClue2 || yClue1 == yClue3 || yClue2 == yClue3)
+        //Place Clues
+        cluesX.clear()
+        cluesY.clear()
+        repeat (3) {
+            cluesX.add((0..<MAP_WIDTH).random())
+        }
+        repeat(3) {
+            cluesY.add((0..<MAP_HEIGHT).random())
+        }
 
 
     }
@@ -81,26 +86,42 @@ class App() {
     fun moveNorth() {
         playerY--
         if (playerY < 0) playerY = 0
+        checkForClue()
     }
     fun moveSouth() {
         playerY++
         if (playerY > MAP_HEIGHT) playerY = MAP_HEIGHT
+        checkForClue()
     }
     fun moveEast() {
         playerX++
         if (playerX > MAP_WIDTH) playerX = MAP_WIDTH
+        checkForClue()
     }
     fun moveWest() {
         playerX--
         if (playerX < 0) playerX = 0
+        checkForClue()
     }
 
+    fun checkForClue() {
+        if (playerX in cluesX) {
+            println("Found clue")
+            cluesX.remove(playerX)
+            playerCollectX++
+        }
+        if (playerY in cluesY) {
+            println("Found clue")
+            cluesY.remove(playerY)
+            playerCollectY++
+        }
+    }
 //    fun playerFoundTreasure(): Boolean {
 //
 //    }
 }
 
-class Locations(val name: String, val treasure: Boolean) {
+class Locations(val name: String, val treasure: Boolean, val clue: Int) {
 
 }
 
@@ -133,7 +154,6 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
     init {
         configureWindow()               // Configure the window
         addControls()                   // Build the UI\
-        placeTreasure()
 
         setLocationRelativeTo(null)     // Centre the window
         isVisible = true                // Make it visible
@@ -245,6 +265,13 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         eastLocation.isVisible = (app.playerX < app.MAP_WIDTH - 1)
         westLocation.isVisible = (app.playerX > 0)
 
+        if (app.playerCollectX == app.TREASURE_CLUES_X) {
+            showTreasure()
+        }
+        if (app.playerCollectY == app.TREASURE_CLUES_Y) {
+            showTreasure()
+        }
+
     }
     fun moveNorth() {
         app.moveNorth()
@@ -262,18 +289,18 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         app.moveWest()
         updateView()
     }
-    fun placeTreasure(){
-//        app.treasureX = app.treasureX * app.GRID_SIZE + app.MARGIN
-//        app.treasureY = app.treasureY * app.GRID_SIZE + app.MARGIN
+    fun showTreasure(){
+        val xPos = app.treasureX * app.GRID_SIZE + app.MARGIN + (app.SQUARE_SIZE/2)
+        val yPos = app.treasureY * app.GRID_SIZE + app.MARGIN + (app.SQUARE_SIZE/2)
+        xPosition.bounds = Rectangle(xPos, backGround.bounds.y, 4, app.MAP_HEIGHT * app.GRID_SIZE)
+        yPosition.bounds = Rectangle(backGround.bounds.x, yPos, app.MAP_WIDTH * app.GRID_SIZE, 4)
 
-        xPosition.bounds = Rectangle(app.treasureX, backGround.bounds.y, 5, app.MAP_HEIGHT * app.GRID_SIZE)
-        yPosition.bounds = Rectangle(backGround.bounds.x,app.treasureY, app.MAP_WIDTH * app.GRID_SIZE, 5)
-
-        println("Treasure X: ${app.treasureX/app.GRID_SIZE}")
-        println("Treasure Y: ${app.treasureY/app.GRID_SIZE}")
-
-//        xPosition.isVisible = true
-//        yPosition.isVisible = true
+        if (app.playerCollectX == app.TREASURE_CLUES_X) {
+            xPosition.isVisible = true
+        }
+        if (app.playerCollectY == app.TREASURE_CLUES_Y) {
+            yPosition.isVisible = true
+        }
     }
     fun findClues(){
 

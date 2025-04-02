@@ -105,6 +105,7 @@ class App() {
     }
 
     fun checkForClue() {
+
         if (playerX in cluesX) {
             println("Found clue")
             cluesX.remove(playerX)
@@ -221,6 +222,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         dialogField.font = baseFont
         dialogField.bounds = Rectangle(app.MAP_WIDTH * app.GRID_SIZE + app.MARGIN + 100, app.MARGIN/2, 250, 336)
         dialogField.background = Color.GRAY
+        dialogField.foreground = Color.BLACK
+        dialogField.isEditable = false
         add(dialogField)
 
         xPosition = JPanel()
@@ -271,6 +274,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         if (app.playerCollectY == app.TREASURE_CLUES_Y) {
             showTreasure()
         }
+        findClues()
 
     }
     fun moveNorth() {
@@ -290,8 +294,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         updateView()
     }
     fun showTreasure(){
-        val xPos = app.treasureX * app.GRID_SIZE + app.MARGIN + (app.SQUARE_SIZE/2)
-        val yPos = app.treasureY * app.GRID_SIZE + app.MARGIN + (app.SQUARE_SIZE/2)
+        val xPos = app.treasureX * app.GRID_SIZE + app.MARGIN + ((app.SQUARE_SIZE - 2)/2)
+        val yPos = app.treasureY * app.GRID_SIZE + app.MARGIN + ((app.SQUARE_SIZE - 2)/2)
         xPosition.bounds = Rectangle(xPos, backGround.bounds.y, 4, app.MAP_HEIGHT * app.GRID_SIZE)
         yPosition.bounds = Rectangle(backGround.bounds.x, yPos, app.MAP_WIDTH * app.GRID_SIZE, 4)
 
@@ -303,7 +307,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         }
     }
     fun findClues(){
-
+        if (app.playerCollectX > 0) dialogField.text = app.playerCollectX.toString()
+        if (app.playerCollectY > 0) dialogField.text = app.playerCollectY.toString()
     }
 
     /**
@@ -333,18 +338,17 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
     }
 
-    override fun keyTyped(e: KeyEvent?) {
-    }
-
     override fun keyPressed(e: KeyEvent?) {
         when (e?.keyCode) {
-            KeyEvent.VK_UP    -> moveNorth()
-            KeyEvent.VK_DOWN  -> moveSouth()
-            KeyEvent.VK_LEFT   -> moveEast()
-            KeyEvent.VK_RIGHT  -> moveWest()
+            KeyEvent.VK_UP    -> app.moveNorth()
+            KeyEvent.VK_DOWN  -> app.moveSouth()
+            KeyEvent.VK_LEFT   -> app.moveEast()
+            KeyEvent.VK_RIGHT  -> app.moveWest()
         }
         updateView()
 
+    }
+    override fun keyTyped(e: KeyEvent?) {
     }
 
     override fun keyReleased(e: KeyEvent?) {

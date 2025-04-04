@@ -38,8 +38,8 @@ class App() {
     // constants
     val GRID_SIZE = 68
     val MARGIN = 18
-    val MAP_WIDTH = 8
-    val MAP_HEIGHT = 5
+    val MAP_WIDTH = 9
+    val MAP_HEIGHT = 7
     val SQUARE_SIZE = GRID_SIZE - MARGIN
     val TREASURE_CLUES_X = 3
     val TREASURE_CLUES_Y = 3
@@ -136,7 +136,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
     // Fields to hold the UI elements
     //Locations
-    private lateinit var currentLocation: JPanel
+    private lateinit var currentLocation: JLabel
     private lateinit var northLocation: JButton
     private lateinit var eastLocation: JButton
     private lateinit var westLocation: JButton
@@ -184,15 +184,16 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 14)
         val startPositionX = app.playerX * app.GRID_SIZE + app.MARGIN
         val startPositionY = app.playerY * app.GRID_SIZE + app.MARGIN
-        val backGroundImage = ImageIcon("src/images/wavesBG.jpg").image
+        var backGroundImage = ImageIcon("src/images/wavesBG.jpg").image
+        val playerIconImage = ImageIcon("src/images/ship-icon-23.png").image
 
         this.addKeyListener(this)
 
-
         //Locations
-        currentLocation = JPanel()
+        currentLocation = JLabel()
         currentLocation.bounds = Rectangle(startPositionX, startPositionY, app.SQUARE_SIZE, app.SQUARE_SIZE)
         currentLocation.background = Color.GRAY
+        currentLocation.icon = ImageIcon(playerIconImage)
         currentLocation.isFocusable = false
         add(currentLocation)
 
@@ -254,6 +255,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         backGround = JLabel()
         backGround.background = Color(0,105, 148)
         backGround.bounds = Rectangle(app.MARGIN/2, app.MARGIN/2, app.MAP_WIDTH * app.GRID_SIZE, app.MAP_HEIGHT * app.GRID_SIZE)
+        backGroundImage = backGroundImage.getScaledInstance(app.MAP_WIDTH * app.GRID_SIZE, app.MAP_HEIGHT * app.GRID_SIZE, Image.SCALE_SMOOTH)
         backGround.icon = ImageIcon(backGroundImage)
         backGround.isFocusable = false
         add(backGround)
@@ -355,10 +357,10 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
     override fun keyPressed(e: KeyEvent?) {
         when (e?.keyCode) {
-            KeyEvent.VK_UP    -> app.moveNorth()
-            KeyEvent.VK_DOWN  -> app.moveSouth()
-            KeyEvent.VK_LEFT   -> app.moveWest()
-            KeyEvent.VK_RIGHT  -> app.moveEast()
+            KeyEvent.VK_UP    ->  if (northLocation.isVisible) app.moveNorth()
+            KeyEvent.VK_DOWN  -> if(southLocation.isVisible) app.moveSouth()
+            KeyEvent.VK_LEFT   -> if(westLocation.isVisible) app.moveWest()
+            KeyEvent.VK_RIGHT  -> if(eastLocation.isVisible) app.moveEast()
         }
         updateView()
 

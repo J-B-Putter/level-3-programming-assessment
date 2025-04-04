@@ -58,12 +58,12 @@ class App() {
 
     var cluesDiscovered = 0
 
+    //Visual Components
+    val BG_IMAGE_FILE = "wavesBG.jpg"
 
     init {
         placeTreasure()
     }
-    //Create Locations
-
 
     fun placeTreasure() {
         //Place treasure
@@ -145,7 +145,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
     private lateinit var yPosition: JPanel
     //Visual Assistants
     private lateinit var dialogField: JTextArea
-    private lateinit var backGround: JPanel
+    private lateinit var backGround: JLabel
 
 
 
@@ -160,6 +160,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         isVisible = true                // Make it visible
 
         //updateView()                    // Initialise the UI
+        backGround
     }
 
     /**
@@ -183,16 +184,22 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 14)
         val startPositionX = app.playerX * app.GRID_SIZE + app.MARGIN
         val startPositionY = app.playerY * app.GRID_SIZE + app.MARGIN
+        val backGroundImage = ImageIcon("src/images/wavesBG.jpg").image
+
+        this.addKeyListener(this)
+
 
         //Locations
         currentLocation = JPanel()
         currentLocation.bounds = Rectangle(startPositionX, startPositionY, app.SQUARE_SIZE, app.SQUARE_SIZE)
         currentLocation.background = Color.GRAY
+        currentLocation.isFocusable = false
         add(currentLocation)
 
         northLocation = JButton()
         northLocation.bounds = Rectangle(startPositionX, startPositionY - app.GRID_SIZE, app.SQUARE_SIZE, app.SQUARE_SIZE)
         northLocation.addActionListener(this)
+        northLocation.isFocusable = false
         northLocation.background = Color.GRAY
         //northLocation.icon
         add(northLocation)
@@ -200,6 +207,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         eastLocation = JButton()
         eastLocation.bounds = Rectangle(startPositionX + app.GRID_SIZE, startPositionY, app.SQUARE_SIZE, app.SQUARE_SIZE)
         eastLocation.addActionListener(this)
+        eastLocation.isFocusable = false
         eastLocation.background = Color.GRAY
         //eastLocation.icon
         add(eastLocation)
@@ -207,6 +215,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         westLocation = JButton()
         westLocation.bounds = Rectangle(startPositionX - app.GRID_SIZE, startPositionY, app.SQUARE_SIZE, app.SQUARE_SIZE)
         westLocation.addActionListener(this)
+        westLocation.isFocusable = false
         westLocation.background = Color.GRAY
         //westLocation.icon
         add(westLocation)
@@ -214,6 +223,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         southLocation = JButton()
         southLocation.bounds = Rectangle(startPositionX + app.GRID_SIZE, startPositionY, app.SQUARE_SIZE, app.SQUARE_SIZE)
         southLocation.addActionListener(this)
+        southLocation.isFocusable = false
         southLocation.background = Color.GRAY
         //southLocation.icon
         add(southLocation)
@@ -223,25 +233,29 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         dialogField.bounds = Rectangle(app.MAP_WIDTH * app.GRID_SIZE + app.MARGIN + 100, app.MARGIN/2, 250, 336)
         dialogField.background = Color.GRAY
         dialogField.foreground = Color.BLACK
+        dialogField.isFocusable = false
         dialogField.isEditable = false
         add(dialogField)
 
         xPosition = JPanel()
-        xPosition.background = Color.RED
+        xPosition.background = Color(170,0,0)
 //        xPosition.bounds = Rectangle(0, 76, 10, 405)
         xPosition.isVisible = false
+        xPosition.isFocusable = false
         add(xPosition)
 
         yPosition = JPanel()
-        yPosition.background = Color.RED
+        yPosition.background = Color(170,0,0)
 //        yPosition.bounds = Rectangle(146, 0, 336, 10)
         yPosition.isVisible = false
+        yPosition.isFocusable = false
         add(yPosition)
 
-        backGround = JPanel()
+        backGround = JLabel()
         backGround.background = Color(0,105, 148)
-        //backGround.icon
         backGround.bounds = Rectangle(app.MARGIN/2, app.MARGIN/2, app.MAP_WIDTH * app.GRID_SIZE, app.MAP_HEIGHT * app.GRID_SIZE)
+        backGround.icon = ImageIcon(backGroundImage)
+        backGround.isFocusable = false
         add(backGround)
 
         updateView()
@@ -275,6 +289,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
             showTreasure()
         }
         findClues()
+        this.requestFocus()
 
     }
     fun moveNorth() {
@@ -342,8 +357,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         when (e?.keyCode) {
             KeyEvent.VK_UP    -> app.moveNorth()
             KeyEvent.VK_DOWN  -> app.moveSouth()
-            KeyEvent.VK_LEFT   -> app.moveEast()
-            KeyEvent.VK_RIGHT  -> app.moveWest()
+            KeyEvent.VK_LEFT   -> app.moveWest()
+            KeyEvent.VK_RIGHT  -> app.moveEast()
         }
         updateView()
 

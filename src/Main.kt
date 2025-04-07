@@ -38,8 +38,8 @@ class App() {
     // constants
     val GRID_SIZE = 68
     val MARGIN = 18
-    val MAP_WIDTH = 9
-    val MAP_HEIGHT = 7
+    val MAP_WIDTH = 8
+    val MAP_HEIGHT = 5
     val SQUARE_SIZE = GRID_SIZE - MARGIN
     val TREASURE_CLUES_X = 3
     val TREASURE_CLUES_Y = 3
@@ -117,15 +117,22 @@ class App() {
             playerCollectY++
         }
     }
-//    fun playerFoundTreasure(): Boolean {
-//
-//    }
+    fun playerFoundTreasure(): Boolean {
+        if (playerX == treasureX && playerY == treasureY) {
+            println("Payer on Treasure Square")
+            return true
+        }
+        else return false
+    }
+
+    //Messages in the dialogField
+    val TUTORIAL_MESSAGE = ""
+    val FOUND_TREASURE_MESSAGE = "Congratulations! You found the treasure, the loot, the fortune of a thousand islands!"
+    val FOUND_CLUE_MESSAGE = "Well done! You found a clue. One step closer to finding the treasure..."
+    val XPOSITION_VISIBLE_MESSAGE = "You just discovered the X-Coordinate of the treasure! This means that the treasure lies somewhere on that vertical line."
+    val YPOSITION_VISIBLE_MESSAGE = "You just discovered the Y-Coordinate of the treasure! This means that the treasure lies somewhere on that horizontal line."
+    val NOTHING_MESSAGE = "Open ocean..."
 }
-
-class Locations(val name: String, val treasure: Boolean, val clue: Int) {
-
-}
-
 
 /**
  * Main UI window (view)
@@ -160,7 +167,6 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         isVisible = true                // Make it visible
 
         //updateView()                    // Initialise the UI
-        backGround
     }
 
     /**
@@ -234,6 +240,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         dialogField.bounds = Rectangle(app.MAP_WIDTH * app.GRID_SIZE + app.MARGIN + 100, app.MARGIN/2, 250, 336)
         dialogField.background = Color.GRAY
         dialogField.foreground = Color.BLACK
+        dialogField.lineWrap = true
         dialogField.isFocusable = false
         dialogField.isEditable = false
         add(dialogField)
@@ -253,7 +260,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         add(yPosition)
 
         backGround = JLabel()
-        backGround.background = Color(0,105, 148)
+//        backGround.background = Color(0,105, 148)
         backGround.bounds = Rectangle(app.MARGIN/2, app.MARGIN/2, app.MAP_WIDTH * app.GRID_SIZE, app.MAP_HEIGHT * app.GRID_SIZE)
         backGroundImage = backGroundImage.getScaledInstance(app.MAP_WIDTH * app.GRID_SIZE, app.MAP_HEIGHT * app.GRID_SIZE, Image.SCALE_SMOOTH)
         backGround.icon = ImageIcon(backGroundImage)
@@ -293,6 +300,7 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         findClues()
         this.requestFocus()
 
+        checkTreasureFound()
     }
     fun moveNorth() {
         app.moveNorth()
@@ -316,16 +324,19 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         xPosition.bounds = Rectangle(xPos, backGround.bounds.y, 4, app.MAP_HEIGHT * app.GRID_SIZE)
         yPosition.bounds = Rectangle(backGround.bounds.x, yPos, app.MAP_WIDTH * app.GRID_SIZE, 4)
 
-        if (app.playerCollectX == app.TREASURE_CLUES_X) {
-            xPosition.isVisible = true
-        }
-        if (app.playerCollectY == app.TREASURE_CLUES_Y) {
-            yPosition.isVisible = true
-        }
+        if (app.playerCollectX == app.TREASURE_CLUES_X) xPosition.isVisible = true
+        if (app.playerCollectY == app.TREASURE_CLUES_Y) yPosition.isVisible = true
     }
     fun findClues(){
         if (app.playerCollectX > 0) dialogField.text = app.playerCollectX.toString()
         if (app.playerCollectY > 0) dialogField.text = app.playerCollectY.toString()
+    }
+    fun checkTreasureFound() {
+//        println("X " + app.treasureX)
+//        println("Y " + app.treasureY)
+        if (app.playerFoundTreasure() == true && xPosition.isVisible && yPosition.isVisible) {
+            dialogField.text = "Congratulations, you found the treasure!"
+        }
     }
 
     /**

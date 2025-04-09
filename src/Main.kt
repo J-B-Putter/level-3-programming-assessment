@@ -104,18 +104,21 @@ class App() {
         checkForClue()
     }
 
-    fun checkForClue() {
+    fun checkForClue(): Boolean {
 
         if (playerX in cluesX) {
             println("Found clue")
             cluesX.remove(playerX)
             playerCollectX++
+            return true
         }
         if (playerY in cluesY) {
             println("Found clue")
             cluesY.remove(playerY)
             playerCollectY++
+            return true
         }
+        else return false
     }
     fun playerFoundTreasure(): Boolean {
         if (playerX == treasureX && playerY == treasureY) {
@@ -128,6 +131,7 @@ class App() {
     //Messages in the dialogField
     val TUTORIAL_MESSAGE = ""
     val FOUND_TREASURE_MESSAGE = "Congratulations! You found the treasure, the loot, the fortune of a thousand islands!"
+    val FOUND_BOTH_POSITIONS_MESSAGE = "You found both coordinates! The treasure lies where the two lines intersect."
     val FOUND_CLUE_MESSAGE = "Well done! You found a clue. One step closer to finding the treasure..."
     val XPOSITION_VISIBLE_MESSAGE = "You just discovered the X-Coordinate of the treasure! This means that the treasure lies somewhere on that vertical line."
     val YPOSITION_VISIBLE_MESSAGE = "You just discovered the Y-Coordinate of the treasure! This means that the treasure lies somewhere on that horizontal line."
@@ -324,18 +328,27 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         xPosition.bounds = Rectangle(xPos, backGround.bounds.y, 4, app.MAP_HEIGHT * app.GRID_SIZE)
         yPosition.bounds = Rectangle(backGround.bounds.x, yPos, app.MAP_WIDTH * app.GRID_SIZE, 4)
 
-        if (app.playerCollectX == app.TREASURE_CLUES_X) xPosition.isVisible = true
-        if (app.playerCollectY == app.TREASURE_CLUES_Y) yPosition.isVisible = true
+        if (app.playerCollectX == app.TREASURE_CLUES_X) {
+            xPosition.isVisible = true
+            if (xPosition.isVisible && !yPosition.isVisible) dialogField.text = app.XPOSITION_VISIBLE_MESSAGE
+            else dialogField.text = ""
+        }
+        if (app.playerCollectY == app.TREASURE_CLUES_Y) {
+            yPosition.isVisible = true
+            if (!xPosition.isVisible && yPosition.isVisible) dialogField.text = app.YPOSITION_VISIBLE_MESSAGE
+            else dialogField.text = ""
+        }
+        if (xPosition.isVisible && yPosition.isVisible) dialogField.text = app.FOUND_BOTH_POSITIONS_MESSAGE
     }
     fun findClues(){
-        if (app.playerCollectX > 0) dialogField.text = app.playerCollectX.toString()
-        if (app.playerCollectY > 0) dialogField.text = app.playerCollectY.toString()
+        if (app.checkForClue()) dialogField.text = app.FOUND_CLUE_MESSAGE
+        else dialogField.text = ""
     }
     fun checkTreasureFound() {
 //        println("X " + app.treasureX)
 //        println("Y " + app.treasureY)
         if (app.playerFoundTreasure() == true && xPosition.isVisible && yPosition.isVisible) {
-            dialogField.text = "Congratulations, you found the treasure!"
+            dialogField.text = app.FOUND_TREASURE_MESSAGE
         }
     }
 

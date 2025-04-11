@@ -9,29 +9,29 @@ This checklist can be used to gauge progress towards different levels of success
 ### Program Functionality
 
 The game functions correctly and meets the specification:
-- [ ] The game is **playable**
-- [ ] The game has a **GUI** with a range of controls
+- [x] The game is **playable**
+- [x] The game has a **GUI** with a range of controls
 - [ ] The **instructions** for the game are available via the GUI
-- [ ] Player provides game **inputs via the GUI** (e.g. moves, actions)
-- [ ] The **current status** of the game is **shown in the GUI**, updated each player input
+- [x] Player provides game **inputs via the GUI** (e.g. moves, actions)
+- [x] The **current status** of the game is **shown in the GUI**, updated each player input
 - [ ] The game is based on a **non-trivial map**
-- [ ] The player can **move between locations**
-- [ ] The player has a **clear purpose** they can attempt to achieve
-- [ ] A **win / end / loss state** is possible
+- [x] The player can **move between locations**
+- [x] The player has a **clear purpose** they can attempt to achieve
+- [x] A **win / end / loss state** is possible
 
 ### Program Code
 
 The program stores data using:
-- [ ] **Variables** of at least two types (e.g. int, text, boolean)
+- [x] **Variables** of at least two types (e.g. int, text, boolean)
 
 The program structure:
-- [ ] Defines and implements a **graphical user interface (GUI)**
+- [x] Defines and implements a **graphical user interface (GUI)**
 - [ ] Makes use of user-defined OOP **classes** from which **objects** are instantiated
-- [ ] Uses **functions** / **methods** to break up the code logically
-- [ ] Contains **sequences** of instructions
-- [ ] Uses **conditional** instructions to control the program flow
-- [ ] Uses program **branches** (if...else, when, etc.)
-- [ ] Uses **iteration** (loops) to repeat things (for, while, etc.)
+- [x] Uses **functions** / **methods** to break up the code logically
+- [x] Contains **sequences** of instructions
+- [x] Uses **conditional** instructions to control the program flow
+- [x] Uses program **branches** (if...else, when, etc.)
+- [x] Uses **iteration** (loops) to repeat things (for, while, etc.)
 
 ### Program Documentation
 
@@ -60,11 +60,11 @@ The program has been tested and there is documented evidence that:
 ### Program Code
 
 The program stores data using variables, where:
-- [ ] Variable **names are well-chosen** (relating to their purpose)
-- [ ] Variable names **begin with lowercase**
-- [ ] Naming is consistent, either **camelCase or snake_case**
-- [ ] Variables are **scoped appropriately** (global or local to a function)
-- [ ] **Global** variables are only used if **genuinely needed**
+- [x] Variable **names are well-chosen** (relating to their purpose)
+- [x] Variable names **begin with lowercase**
+- [x] Naming is consistent, either **camelCase or snake_case**
+- [x] Variables are **scoped appropriately** (global or local to a function)
+- [x] **Global** variables are only used if **genuinely needed**
 
 The program uses OOP classes and objects appropriately, where:
 - [ ] OOP class **names are well-chosen**, relating to their functionality
@@ -73,9 +73,9 @@ The program uses OOP classes and objects appropriately, where:
 - [ ] OOP classes contain **well-chosen methods**
 
 The program uses functions appropriately, where:
-- [ ] Function **names are well-chosen**, relating to their functionality 
-- [ ] Functions use **parameters** to pass data into them as needed
-- [ ] Functions provide a **return value** to the calling code if needed
+- [x] Function **names are well-chosen**, relating to their functionality 
+- [x] Functions use **parameters** to pass data into them as needed
+- [x] Functions provide a **return value** to the calling code if needed
 
 ### Game GUI
 

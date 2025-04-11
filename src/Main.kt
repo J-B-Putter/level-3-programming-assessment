@@ -197,7 +197,10 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         //Image icons
         var backGroundImage = ImageIcon("src/images/wavesBG.jpg").image
         val playerIconImage = ImageIcon("src/images/ship-icon-23.png").image
-        var northArrowImage = ImageIcon("src/images/north-arrow.png").image
+        var northArrowImage = ImageIcon("src/images/north-arrow-compass-5287 (2).png").image
+        var eastArrowImage = ImageIcon("src/images/east-arrow-compass-5287 (2).png").image
+        var westArrowImage = ImageIcon("src/images/west-arrow-compass-5287 (2).png").image
+        var southArrowImage = ImageIcon("src/images/south-arrow-compass-5287 (2).png").image
 
         this.addKeyListener(this)
 
@@ -213,7 +216,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         northLocation.bounds = Rectangle(startPositionX, startPositionY - app.GRID_SIZE, app.SQUARE_SIZE, app.SQUARE_SIZE)
         northLocation.addActionListener(this)
         northLocation.isFocusable = false
-        northLocation.background = Color.GRAY
+        northLocation.background = Color(0,0,0,0)
+        northLocation.border = BorderFactory.createEmptyBorder()
         northArrowImage = northArrowImage.getScaledInstance(northLocation.width, northLocation.height, Image.SCALE_SMOOTH)
         northLocation.icon = ImageIcon(northArrowImage)
         add(northLocation)
@@ -222,24 +226,30 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         eastLocation.bounds = Rectangle(startPositionX + app.GRID_SIZE, startPositionY, app.SQUARE_SIZE, app.SQUARE_SIZE)
         eastLocation.addActionListener(this)
         eastLocation.isFocusable = false
-        eastLocation.background = Color.GRAY
-        //eastLocation.icon
+        eastLocation.background = Color(0,0,0,0)
+        eastLocation.border = BorderFactory.createEmptyBorder()
+        eastArrowImage = eastArrowImage.getScaledInstance(eastLocation.width, eastLocation.height, Image.SCALE_SMOOTH)
+        eastLocation.icon = ImageIcon(eastArrowImage)
         add(eastLocation)
 
         westLocation = JButton()
         westLocation.bounds = Rectangle(startPositionX - app.GRID_SIZE, startPositionY, app.SQUARE_SIZE, app.SQUARE_SIZE)
         westLocation.addActionListener(this)
         westLocation.isFocusable = false
-        westLocation.background = Color.GRAY
-        //westLocation.icon
+        westLocation.background = Color(0,0,0,0)
+        westLocation.border = BorderFactory.createEmptyBorder()
+        westArrowImage = westArrowImage.getScaledInstance(westLocation.width, westLocation.height, Image.SCALE_SMOOTH)
+        westLocation.icon = ImageIcon(westArrowImage)
         add(westLocation)
 
         southLocation = JButton()
         southLocation.bounds = Rectangle(startPositionX + app.GRID_SIZE, startPositionY, app.SQUARE_SIZE, app.SQUARE_SIZE)
         southLocation.addActionListener(this)
         southLocation.isFocusable = false
-        southLocation.background = Color.GRAY
-        //southLocation.icon
+        southLocation.background = Color(0,0,0,0)
+        southLocation.border = BorderFactory.createEmptyBorder()
+        southArrowImage = southArrowImage.getScaledInstance(southLocation.width, southLocation.height, Image.SCALE_SMOOTH)
+        southLocation.icon = ImageIcon(southArrowImage)
         add(southLocation)
 
         dialogField = JTextArea()

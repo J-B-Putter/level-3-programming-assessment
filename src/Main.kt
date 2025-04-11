@@ -194,8 +194,10 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 14)
         val startPositionX = app.playerX * app.GRID_SIZE + app.MARGIN
         val startPositionY = app.playerY * app.GRID_SIZE + app.MARGIN
+        //Image icons
         var backGroundImage = ImageIcon("src/images/wavesBG.jpg").image
         val playerIconImage = ImageIcon("src/images/ship-icon-23.png").image
+        var northArrowImage = ImageIcon("src/images/north-arrow.png").image
 
         this.addKeyListener(this)
 
@@ -207,12 +209,13 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         currentLocation.isFocusable = false
         add(currentLocation)
 
-        northLocation = JButton()
+        northLocation = JButton(ImageIcon(northArrowImage))
         northLocation.bounds = Rectangle(startPositionX, startPositionY - app.GRID_SIZE, app.SQUARE_SIZE, app.SQUARE_SIZE)
         northLocation.addActionListener(this)
         northLocation.isFocusable = false
         northLocation.background = Color.GRAY
-        //northLocation.icon
+        northArrowImage = northArrowImage.getScaledInstance(northLocation.width, northLocation.height, Image.SCALE_SMOOTH)
+        northLocation.icon = ImageIcon(northArrowImage)
         add(northLocation)
 
         eastLocation = JButton()

@@ -1,0 +1,10 @@
+Welcome to Sailing Adventure!
+
+This is a game focused on exploration and collecting elements to achieve a goal. 
+You are the captain of a ship and you're looking for a sunken treasure. Clues are scattered around the map. You need to find them all to reveal the location of the treasure. 
+
+How to Play:
+- To move around, use the arrow keys or click on the arrow-buttons.
+- Move around the map and search for clues. A message will pop up in the box if you are on the location of a clue (keep your eyes open for it!). Once you moved over the clue it automatically collects it for you. 
+- If you found all the clues for the X coordinate of the treasure, it will display as a line on the map. This is the same for the Y coordinate. 
+- When both X and Y coordinates are found, you can go to the location where they intersect to collect the treasure! 

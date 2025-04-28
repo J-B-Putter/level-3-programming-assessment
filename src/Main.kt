@@ -16,6 +16,7 @@
 import com.formdev.flatlaf.FlatDarkLaf
 import java.awt.*
 import java.awt.event.*
+import java.io.File
 import javax.swing.*
 
 
@@ -53,13 +54,17 @@ class App() {
     var treasureX = 0
     var treasureY = 0
 
-    val cluesX = mutableListOf<Int>()
-    val cluesY = mutableListOf<Int>()
+    /**
+     * Creating lists for different clues
+     */
+    //X Coordinate clues
+    val XcluesX = mutableListOf<Int>()
+    val XcluesY = mutableListOf<Int>()
+    //Y Coordinate clues
+    val YcluesY = mutableListOf<Int>()
+    val YcluesX = mutableListOf<Int>()
 
     var cluesDiscovered = 0
-
-    //Visual Components
-    val BG_IMAGE_FILE = "wavesBG.jpg"
 
     init {
         placeTreasure()
@@ -71,18 +76,25 @@ class App() {
         treasureY = (0..<MAP_HEIGHT).random()
 
         //Place Clues
-        cluesX.clear()
-        cluesY.clear()
-        repeat (3) {
-            cluesX.add((0..<MAP_WIDTH).random())
+        XcluesX.clear()
+        XcluesY.clear()
+        YcluesX.clear()
+        YcluesY.clear()
+        repeat (TREASURE_CLUES_X) {
+            XcluesX.add((0..<MAP_WIDTH).random())
+            XcluesY.add((0..<MAP_HEIGHT).random())
         }
-        repeat(3) {
-            cluesY.add((0..<MAP_HEIGHT).random())
+        repeat(TREASURE_CLUES_Y) {
+            YcluesY.add((0..<MAP_HEIGHT).random())
+            YcluesX.add((0..<MAP_WIDTH).random())
         }
 
 
     }
 
+    /**
+     * Handles movement input
+     */
     fun moveNorth() {
         playerY--
         if (playerY < 0) playerY = 0
@@ -104,21 +116,22 @@ class App() {
         checkForClue()
     }
 
-    fun checkForClue(): Boolean {
-
-        if (playerX in cluesX) {
-            println("Found clue")
-            cluesX.remove(playerX)
+    fun checkForClue(): Int {
+        if (playerX in XcluesX && playerY in XcluesY) {
+            println("Found clue X")
+            XcluesX.remove(playerX)
+            XcluesY.remove(playerY)
             playerCollectX++
-            return true
+            return 1
         }
-        if (playerY in cluesY) {
-            println("Found clue")
-            cluesY.remove(playerY)
+        if (playerY in YcluesY && playerX in YcluesX) {
+            println("Found clue Y")
+            YcluesX.remove(playerX)
+            YcluesY.remove(playerY)
             playerCollectY++
-            return true
+            return 2
         }
-        else return false
+        else return 0
     }
     fun playerFoundTreasure(): Boolean {
         if (playerX == treasureX && playerY == treasureY) {
@@ -128,9 +141,21 @@ class App() {
         else return false
     }
 
-    //Messages in the dialogField
-    val TUTORIAL_MESSAGE = ""
-    val FOUND_TREASURE_MESSAGE = "Congratulations! You found the treasure, the loot, the fortune of a thousand islands!"
+    /**
+     * Messages in the dialogField
+     */
+    val TUTORIAL_MESSAGE = "Welcome to Sailing Adventure!\n" +
+            "\n" +
+            "This is a game focused on exploration and collecting elements to achieve a goal. \n" +
+            "You are the captain of a ship and you're looking for a sunken treasure. Clues are scattered around the map. You need to find them all to reveal the location of the treasure. \n" +
+            "\n" +
+            "How to Play:\n" +
+            "- To move around, use the arrow keys or click on the arrow-buttons.\n" +
+            "- Move around the map and search for clues. A message will pop up in the box if you are on the location of a clue (keep your eyes open for it!). Once you moved over the clue it automatically collects it for you. \n" +
+            "- If you found all the clues for the X coordinate of the treasure, it will display as a line on the map. This is the same for the Y coordinate. \n" +
+            "- When both X and Y coordinates are found, you can go to the location where they intersect to collect the treasure!"
+
+    val FOUND_TREASURE_MESSAGE = "Congratulations! You found the treasure, the loot,\n the fortune of a thousand islands!"
     val FOUND_BOTH_POSITIONS_MESSAGE = "You found both coordinates! The treasure lies where the two lines intersect."
     val FOUND_CLUE_MESSAGE = "Well done! You found a clue. One step closer to finding the treasure..."
     val XPOSITION_VISIBLE_MESSAGE = "You just discovered the X-Coordinate of the treasure! This means that the treasure lies somewhere on that vertical line."
@@ -170,7 +195,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         setLocationRelativeTo(null)     // Centre the window
         isVisible = true                // Make it visible
 
-        //updateView()                    // Initialise the UI
+        showTutorial()                  //Showing tutorial
+        updateView()                    // Initialise the UI
     }
 
     /**
@@ -252,32 +278,33 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         southLocation.icon = ImageIcon(southArrowImage)
         add(southLocation)
 
+        //Text field for messages and such
         dialogField = JTextArea()
         dialogField.font = baseFont
         dialogField.bounds = Rectangle(app.MAP_WIDTH * app.GRID_SIZE + app.MARGIN + 100, app.MARGIN/2, 250, 336)
         dialogField.background = Color.GRAY
         dialogField.foreground = Color.BLACK
         dialogField.lineWrap = true
+//        dialogField.
         dialogField.isFocusable = false
         dialogField.isEditable = false
         add(dialogField)
 
+        //Treasure Visual Coordinates
         xPosition = JPanel()
         xPosition.background = Color(170,0,0)
-//        xPosition.bounds = Rectangle(0, 76, 10, 405)
         xPosition.isVisible = false
         xPosition.isFocusable = false
         add(xPosition)
 
         yPosition = JPanel()
         yPosition.background = Color(170,0,0)
-//        yPosition.bounds = Rectangle(146, 0, 336, 10)
         yPosition.isVisible = false
         yPosition.isFocusable = false
         add(yPosition)
 
+        //Visual Map
         backGround = JLabel()
-//        backGround.background = Color(0,105, 148)
         backGround.bounds = Rectangle(app.MARGIN/2, app.MARGIN/2, app.MAP_WIDTH * app.GRID_SIZE, app.MAP_HEIGHT * app.GRID_SIZE)
         backGroundImage = backGroundImage.getScaledInstance(app.MAP_WIDTH * app.GRID_SIZE, app.MAP_HEIGHT * app.GRID_SIZE, Image.SCALE_SMOOTH)
         backGround.icon = ImageIcon(backGroundImage)
@@ -319,6 +346,14 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
 
         checkTreasureFound()
     }
+    fun showTutorial(){
+        dialogField.text = app.TUTORIAL_MESSAGE
+    }
+
+    /**
+     * Connecting the App class to the controls
+     * and Updating the UI as changes are made
+     */
     fun moveNorth() {
         app.moveNorth()
         updateView()
@@ -335,6 +370,11 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         app.moveWest()
         updateView()
     }
+
+    /**
+     * Events based on Certain conditions
+     * and State of UI elements
+     */
     fun showTreasure(){
         val xPos = app.treasureX * app.GRID_SIZE + app.MARGIN + ((app.SQUARE_SIZE - 2)/2)
         val yPos = app.treasureY * app.GRID_SIZE + app.MARGIN + ((app.SQUARE_SIZE - 2)/2)
@@ -354,12 +394,11 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         if (xPosition.isVisible && yPosition.isVisible) dialogField.text = app.FOUND_BOTH_POSITIONS_MESSAGE
     }
     fun findClues(){
-        if (app.checkForClue()) dialogField.text = app.FOUND_CLUE_MESSAGE
-        else dialogField.text = ""
+        if (app.checkForClue() == 1 || app.checkForClue() == 2) dialogField.text = app.FOUND_CLUE_MESSAGE
+        if (dialogField.text == app.TUTORIAL_MESSAGE) dialogField.text = app.TUTORIAL_MESSAGE
+        else dialogField.text = app.NOTHING_MESSAGE
     }
     fun checkTreasureFound() {
-//        println("X " + app.treasureX)
-//        println("Y " + app.treasureY)
         if (app.playerFoundTreasure() == true && xPosition.isVisible && yPosition.isVisible) {
             dialogField.text = app.FOUND_TREASURE_MESSAGE
         }

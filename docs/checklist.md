@@ -11,10 +11,10 @@ This checklist can be used to gauge progress towards different levels of success
 The game functions correctly and meets the specification:
 - [x] The game is **playable**
 - [x] The game has a **GUI** with a range of controls
-- [ ] The **instructions** for the game are available via the GUI
+- [x] The **instructions** for the game are available via the GUI
 - [x] Player provides game **inputs via the GUI** (e.g. moves, actions)
 - [x] The **current status** of the game is **shown in the GUI**, updated each player input
-- [ ] The game is based on a **non-trivial map**
+- [x] The game is based on a **non-trivial map**
 - [x] The player can **move between locations**
 - [x] The player has a **clear purpose** they can attempt to achieve
 - [x] A **win / end / loss state** is possible
@@ -26,7 +26,7 @@ The program stores data using:
 
 The program structure:
 - [x] Defines and implements a **graphical user interface (GUI)**
-- [ ] Makes use of user-defined OOP **classes** from which **objects** are instantiated
+- [x] Makes use of user-defined OOP **classes** from which **objects** are instantiated
 - [x] Uses **functions** / **methods** to break up the code logically
 - [x] Contains **sequences** of instructions
 - [x] Uses **conditional** instructions to control the program flow
@@ -36,9 +36,9 @@ The program structure:
 ### Program Documentation
 
 The program code:
-- [ ] Is **indented** correctly
-- [ ] Is **laid-out clearly**
-- [ ] Contains **comments** that help in understanding how it works
+- [x] Is **indented** correctly
+- [x] Is **laid-out clearly**
+- [x] Contains **comments** that help in understanding how it works
 
 ### Program Testing
 
@@ -67,10 +67,10 @@ The program stores data using variables, where:
 - [x] **Global** variables are only used if **genuinely needed**
 
 The program uses OOP classes and objects appropriately, where:
-- [ ] OOP class **names are well-chosen**, relating to their functionality
-- [ ] OOP class names **begin with uppercase**
-- [ ] OOP classes contain **well-chosen data fields**
-- [ ] OOP classes contain **well-chosen methods**
+- [x] OOP class **names are well-chosen**, relating to their functionality
+- [x] OOP class names **begin with uppercase**
+- [x] OOP classes contain **well-chosen data fields**
+- [x] OOP classes contain **well-chosen methods**
 
 The program uses functions appropriately, where:
 - [x] Function **names are well-chosen**, relating to their functionality 

@@ -10,9 +10,9 @@ Terminology:
 
 ---
 
-## Example Test Name
+## Movement Test
 
-Example test description. Example test description. Example test description. Example test description. Example test description. Example test description.
+User input on the keyboard is used for player movement and is functional.
 
 ### Test Data To Use
 

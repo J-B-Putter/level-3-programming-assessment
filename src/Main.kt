@@ -184,7 +184,6 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
     private lateinit var backGround: JLabel
 
 
-
     /**
      * Configure the UI and display it
      */
@@ -203,8 +202,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
      * Configure the main window
      */
     private fun configureWindow() {
-        title = "Kotlin Swing GUI Demo"
-        contentPane.preferredSize = Dimension(1000, 500)
+        title = "Sailing Adventure"
+        contentPane.preferredSize = Dimension( app.MAP_WIDTH * app.GRID_SIZE + app.MARGIN + 500, app.MAP_HEIGHT * app.GRID_SIZE + app.MARGIN)
         defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
         isResizable = false
         layout = null
@@ -281,14 +280,16 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         //Text field for messages and such
         dialogField = JTextArea()
         dialogField.font = baseFont
-        dialogField.bounds = Rectangle(app.MAP_WIDTH * app.GRID_SIZE + app.MARGIN + 100, app.MARGIN/2, 250, 336)
         dialogField.background = Color.GRAY
         dialogField.foreground = Color.BLACK
         dialogField.lineWrap = true
-//        dialogField.
         dialogField.isFocusable = false
         dialogField.isEditable = false
-        add(dialogField)
+
+        val dialogScrollPane = JScrollPane(dialogField)
+        dialogScrollPane.bounds = Rectangle(app.MAP_WIDTH * app.GRID_SIZE + app.MARGIN + app.MARGIN/2, app.MARGIN/2, 450, 336)
+        dialogField.bounds = Rectangle(0, 0, dialogScrollPane.width, dialogScrollPane.height)
+        add(dialogScrollPane)
 
         //Treasure Visual Coordinates
         xPosition = JPanel()
@@ -342,6 +343,8 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
             showTreasure()
         }
         findClues()
+        if (dialogField.text == app.TUTORIAL_MESSAGE && app.playerX == 2 && app.playerY == 4) dialogField.text = app.TUTORIAL_MESSAGE
+        else dialogField.text = app.NOTHING_MESSAGE
         this.requestFocus()
 
         checkTreasureFound()

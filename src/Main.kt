@@ -116,22 +116,22 @@ class App() {
         checkForClue()
     }
 
-    fun checkForClue(): Int {
+    fun checkForClue(): String {
         if (playerX in XcluesX && playerY in XcluesY) {
             println("Found clue X")
             XcluesX.remove(playerX)
             XcluesY.remove(playerY)
             playerCollectX++
-            return 1
+            return FOUND_CLUE_MESSAGE
         }
         if (playerY in YcluesY && playerX in YcluesX) {
             println("Found clue Y")
             YcluesX.remove(playerX)
             YcluesY.remove(playerY)
             playerCollectY++
-            return 2
+            return FOUND_CLUE_MESSAGE
         }
-        else return 0
+        else return ""
     }
     fun playerFoundTreasure(): Boolean {
         if (playerX == treasureX && playerY == treasureY) {
@@ -342,11 +342,10 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         if (app.playerCollectY == app.TREASURE_CLUES_Y) {
             showTreasure()
         }
-        findClues()
         if (dialogField.text == app.TUTORIAL_MESSAGE && app.playerX == 2 && app.playerY == 4) dialogField.text = app.TUTORIAL_MESSAGE
         else dialogField.text = app.NOTHING_MESSAGE
         this.requestFocus()
-
+        findClues()
         checkTreasureFound()
     }
     fun showTutorial(){
@@ -397,9 +396,9 @@ class MainWindow(val app: App) : JFrame(), ActionListener, KeyListener {
         if (xPosition.isVisible && yPosition.isVisible) dialogField.text = app.FOUND_BOTH_POSITIONS_MESSAGE
     }
     fun findClues(){
-        if (app.checkForClue() == 1 || app.checkForClue() == 2) dialogField.text = app.FOUND_CLUE_MESSAGE
         if (dialogField.text == app.TUTORIAL_MESSAGE) dialogField.text = app.TUTORIAL_MESSAGE
-        else dialogField.text = app.NOTHING_MESSAGE
+        if (app.checkForClue() == app.FOUND_CLUE_MESSAGE) dialogField.text = app.FOUND_CLUE_MESSAGE
+//        else dialogField.text = app.NOTHING_MESSAGE
     }
     fun checkTreasureFound() {
         if (app.playerFoundTreasure() == true && xPosition.isVisible && yPosition.isVisible) {

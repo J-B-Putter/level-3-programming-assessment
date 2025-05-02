@@ -25,5 +25,6 @@ The project is written in the [Kotlin](https://kotlinlang.org) programming langu
 
 ## Project Description
 
-**PLACE YOUR PROJECT DESCRIPTION HERE**
+**Sailing Adventure** is a game in which the player explores a map in search of clues with the goal of finding a hidden treasure. 
+
 

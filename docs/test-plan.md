@@ -12,30 +12,44 @@ Terminology:
 
 ## Movement Test
 
-User input on the keyboard is used for player movement and is functional.
+User input on the keyboard and on the buttons are used for player movement and is functional. 
 
 ### Test Data To Use
 
-Details of test data and reasons for selection. Details of test data and reasons for selection. Details of test data and reasons for selection.
+Key listeners and Action listeners. 
 
 ### Expected Test Result
 
-Statement detailing what should happen. Statement detailing what should happen. Statement detailing what should happen. Statement detailing what should happen.
+Keyboard input and button input will control player movement.  
 
 ---
 
-## Example Test Name
+## Boundary Test
 
-Example test description. Example test description. Example test description. Example test description. Example test description. Example test description.
+Player movement is limited by the size of the map. Appropriate Button(s) are hidden **only** if the player reaches the edge of the map. 
 
 ### Test Data To Use
 
-Details of test data and reasons for selection. Details of test data and reasons for selection. Details of test data and reasons for selection.
+Movement Functions. 
 
 ### Expected Test Result
 
-Statement detailing what should happen. Statement detailing what should happen. Statement detailing what should happen. Statement detailing what should happen.
+Player movement should not exceed the boundaries of the map and the appropriate button(s) should be hidden at appropriate times.  
 
 ---
+
+## Random Treasure Placement
+
+Treasure placement is random with each run of the program. 
+
+### Test Data To Use
+
+Random functions and coordinate placement.
+
+### Expected Test Result
+
+Treasure coordinates should be different with each program run. 
+
+___
 
 

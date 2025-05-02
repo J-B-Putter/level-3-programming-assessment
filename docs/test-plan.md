@@ -52,4 +52,17 @@ Treasure coordinates should be different with each program run.
 
 ___
 
+## Finding Treasure
+
+When all clues are found and the location of the treasure is displayed, an appropriate message is shown in the dialog area. 
+
+### Test Data to Use
+
+Text variable. 
+
+### Expected Result
+
+An appropriate message is displayed in the dialog area as soon as the player is on the known coordinates of the treasure. 
+
+___
 

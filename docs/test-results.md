@@ -36,19 +36,18 @@ The edges of the map limit player movement and hide buttons.
 
 ---
 
-## Random Treasure Placement
+## Finding Treasure
 
-Treasure placement is random with each run of the program.
+When all clues are found and the location of the treasure is displayed, an appropriate message is shown in the dialog area.
 
 ### Test Data Used
 
-Random functions and coordinate placement.
+Text variable.
 
-### Test Results
+# Test Results
 
-![Random_test.gif](screenshots%2FRandom_test.gif)
+![Winning_test.gif](screenshots%2FWinning_test.gif)
 
-Treasure coordinates should be different with each program run.
-
+An appropriate message is displayed when the player finds the treasure. 
 ___
 
